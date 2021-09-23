@@ -1,0 +1,6 @@
+name: Skullcrates
+version: ${project.version}
+main: de.skyenton.skullcrates.Skullcrates
+authors: [ SkyEnton, MorrisBr, H565656 ]
+description: Crate System für diverse Server von SkyEnton
+website: SkyEnton.de
