@@ -22,7 +22,7 @@ public class CrateService {
 
     public void openInventory(String nameID, UUID uuid) {
         crateInventorys.get(nameID).onOpen(uuid);
-        Bukkit.getPlayer(uuid).openInventory(getCrateInventory(nameID).getCurrentPage().getInventory());
+        Bukkit.getPlayer(uuid).openInventory(getCrateInventory(nameID).getCurrentPage(uuid).getInventory());
     }
 
     public CrateInventory getCrateInventory(String nameID) {

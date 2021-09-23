@@ -37,9 +37,10 @@ public abstract class CrateInventory implements Listener {
 
 
     @EventHandler
-    public void onPlayerJoin(InventoryClickEvent event) {
-        if(event.ge)
-        onClick(getCurrentPage(), event.getCurrentItem(), event);
+    public void onClickEvent(InventoryClickEvent event) {
+        if(event.getInventory() != null && event.getClickedInventory() != null && event.getCurrentItem() != null) {
+            onClick(getCurrentPage(event.getWhoClicked().getUniqueId()), event.getCurrentItem(), event);
+        }
     }
 
 
@@ -53,28 +54,28 @@ public abstract class CrateInventory implements Listener {
         HandlerList.unregisterAll(this);
     }
 
-    public CratePage getCurrentPage() {
+    public CratePage getCurrentPage(UUID playerUuid) {
         return pages.get(currentPage.get(playerUuid));
     }
 
-    public Integer getCurrentPageAsCount() {
+    public Integer getCurrentPageAsCount(UUID playerUuid) {
         return currentPage.get(playerUuid);
     }
 
-    public void nextPage() {
+    public void nextPage(UUID playerUuid) {
         currentPage.put(playerUuid, currentPage.get(playerUuid)+1);
     }
 
-    public void backPage() {
+    public void backPage(UUID playerUuid) {
         currentPage.put(playerUuid, currentPage.get(playerUuid)-1);
     }
 
-    public CratePage getNextPage() {
-        return pages.get(getCurrentPageAsCount()+1);
+    public CratePage getNextPage(UUID playerUuid) {
+        return pages.get(getCurrentPageAsCount(playerUuid)+1);
     }
 
-    public CratePage getBackPage() {
-        return pages.get(currentPage-1);
+    public CratePage getBackPage(UUID playerUuid) {
+        return pages.get(getCurrentPageAsCount(playerUuid)-1);
     }
 
 }
