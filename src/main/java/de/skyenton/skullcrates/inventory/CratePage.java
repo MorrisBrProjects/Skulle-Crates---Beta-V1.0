@@ -49,6 +49,10 @@ public class CratePage {
         getInventory().removeItem(itemStack);
     }
 
+    public void setContent(ItemStack[] items) {
+        getInventory().setContents(items);
+    }
+
 
 
 }

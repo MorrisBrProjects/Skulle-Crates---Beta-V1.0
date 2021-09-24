@@ -37,24 +37,40 @@ public abstract class CrateInventory implements Listener {
     }
 
     public void onClose(CratePage currentPage, InventoryCloseEvent event) {
+
     }
 
     public abstract void onCreate();
     public abstract void onRegister();
     public abstract void onUnRegister();
+    public abstract void onClickInInventory(CratePage clickedPage, ItemStack currentItem, InventoryClickEvent event);
     public abstract void onClick(CratePage clickedPage, ItemStack currentItem, InventoryClickEvent event);
 
 
     @EventHandler
     public void onClickEvent(InventoryClickEvent event) {
-        if(event.getInventory() != null && event.getClickedInventory() != null && event.getCurrentItem() != null) {
+        if(event.getInventory() != null
+                && event.getClickedInventory() != null
+                && event.getCurrentItem() != null && crateService.getOpenedCrateInventory(event.getWhoClicked().getUniqueId()) != null
+                && crateService.getOpenedCrateInventory(event.getWhoClicked().getUniqueId()).getCurrentPage().getTitle().
+                equals(event.getClickedInventory().
+                        getTitle())) {
+            onClickInInventory(getCurrentPage(), event.getCurrentItem(), event);
+        }
+
+        if(event.getInventory() != null
+                && event.getClickedInventory() != null
+                && event.getCurrentItem() != null && crateService.getOpenedCrateInventory(event.getWhoClicked().getUniqueId()) != null
+                && crateService.getOpenedCrateInventory(event.getWhoClicked().getUniqueId()).getCurrentPage().getTitle().
+                equals(event.getInventory().
+                        getTitle())) {
             onClick(getCurrentPage(), event.getCurrentItem(), event);
         }
     }
 
     @EventHandler
     public void onCloseEvent(InventoryCloseEvent event) {
-        if(crateService.getOpenedCrateInventory(event.getPlayer().getUniqueId()) != null) {
+        if(crateService.getOpenedCrateInventory(event.getPlayer().getUniqueId()) != null && crateService.getOpenedCrateInventory(event.getPlayer().getUniqueId()).getCurrentPage().getTitle().equals(event.getInventory().getTitle())) {
             crateService.getOpenedCrateInventory(event.getPlayer().getUniqueId()).onClose(getCurrentPage(), event);
         }
     }
@@ -62,12 +78,12 @@ public abstract class CrateInventory implements Listener {
 
     public void register() {
         onRegister();
-        //plugin.getServer().getPluginManager().registerEvents(this, plugin);
+        plugin.getServer().getPluginManager().registerEvents(this, plugin);
     }
 
     public void unregister() {
         onUnRegister();
-        //HandlerList.unregisterAll(this);
+        HandlerList.unregisterAll(this);
     }
 
     public CratePage getCurrentPage() {

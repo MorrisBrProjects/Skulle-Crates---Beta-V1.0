@@ -3,9 +3,13 @@ package de.skyenton.skullcrates.services;
 import de.skyenton.skullcrates.inventory.CrateInventory;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
+import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.HashMap;
 import java.util.UUID;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 public class CrateService {
 
@@ -14,7 +18,7 @@ public class CrateService {
 
     public void registerInventory(String nameID, CrateInventory crateInventory) {
         crateInventorys.put(nameID, crateInventory);
-        //crateInventory.register(); // kann registed seiN!
+        crateInventory.register(); // kann registed seiN!
     }
 
     public void unregisterInventory(String nameID) {
@@ -25,7 +29,8 @@ public class CrateService {
     public void openRegistedInventory(String nameID, Player player) {
         crateInventorys.get(nameID).onOpen(player);
         System.out.println(crateInventorys.get(nameID).getCurrentPage().getInventory().getTitle());
-        player.openInventory(crateInventorys.get(nameID).getCurrentPage().getInventory());
+       // player.openInventory(Bukkit.createInventory(null, 9*3, "test"));
+        player.openInventory(getRegistedCrateInventory(nameID).getCurrentPage().getInventory());
     }
 
     public void openCustomInventory(CrateInventory crateInventory, Player player) {

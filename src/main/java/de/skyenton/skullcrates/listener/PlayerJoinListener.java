@@ -13,6 +13,10 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
+
 public class PlayerJoinListener implements Listener {
 
     private CrateService crateService;
@@ -25,7 +29,13 @@ public class PlayerJoinListener implements Listener {
 
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent event) {
-        crateService.openRegistedInventory(InventoryTypes.MAIN.name(), event.getPlayer());
+        final ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
+        executorService.schedule(new Runnable() {
+            @Override
+            public void run() {
+               crateService.openCustomInventory(new CrateCreateInventory((JavaPlugin) plugin, crateService), event.getPlayer());
+            }
+        }, 1, TimeUnit.SECONDS);
     }
 
 }

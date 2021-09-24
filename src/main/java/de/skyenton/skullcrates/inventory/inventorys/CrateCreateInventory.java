@@ -3,6 +3,7 @@ package de.skyenton.skullcrates.inventory.inventorys;
 import de.skyenton.skullcrates.inventory.CrateInventory;
 import de.skyenton.skullcrates.inventory.CratePage;
 import de.skyenton.skullcrates.services.CrateService;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
@@ -15,6 +16,7 @@ public class CrateCreateInventory extends CrateInventory {
         super(plugin, crateService);
         System.out.println("construktor");
         CratePage page = new CratePage("test", 9*3);
+        page.addItem(new ItemStack(Material.GLASS, 1));
         setPage(0, page);
         System.out.println("create");
     }
@@ -36,6 +38,11 @@ public class CrateCreateInventory extends CrateInventory {
     @Override
     public void onUnRegister() {
         System.out.println("unregister");
+    }
+
+    @Override
+    public void onClickInInventory(CratePage clickedPage, ItemStack currentItem, InventoryClickEvent event) {
+
     }
 
     @Override
