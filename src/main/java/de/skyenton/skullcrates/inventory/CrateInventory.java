@@ -78,4 +78,8 @@ public abstract class CrateInventory implements Listener {
         return pages.get(getCurrentPageAsCount(playerUuid)-1);
     }
 
+    public void addPage(CratePage page) {
+        pages.put(pages.size()+1, page);
+    }
+
 }

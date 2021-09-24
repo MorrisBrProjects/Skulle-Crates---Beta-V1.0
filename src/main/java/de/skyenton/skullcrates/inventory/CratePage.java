@@ -2,6 +2,7 @@ package de.skyenton.skullcrates.inventory;
 
 import org.bukkit.Bukkit;
 import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.ItemStack;
 
 public class CratePage {
 
@@ -38,6 +39,14 @@ public class CratePage {
 
     public void setInventory(Inventory inventory) {
         this.inventory = inventory;
+    }
+
+    public void addItem(ItemStack itemStack) {
+        getInventory().addItem(itemStack);
+    }
+
+    public void removeItem(ItemStack itemStack) {
+        getInventory().removeItem(itemStack);
     }
 
 
