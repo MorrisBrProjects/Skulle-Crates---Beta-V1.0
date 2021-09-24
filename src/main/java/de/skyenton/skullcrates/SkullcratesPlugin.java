@@ -3,6 +3,8 @@ package de.skyenton.skullcrates;
 import de.skyenton.skullcrates.config.FileHandler;
 import de.skyenton.skullcrates.inventory.CrateInventory;
 import de.skyenton.skullcrates.inventory.inventorys.CrateCreateInventory;
+import de.skyenton.skullcrates.inventory.inventorys.InventoryTypes;
+import de.skyenton.skullcrates.listener.PlayerJoinListener;
 import de.skyenton.skullcrates.services.CrateService;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -14,12 +16,13 @@ public final class SkullcratesPlugin extends JavaPlugin {
 
     @Override
     public void onEnable() {
-        crateService.registerInventory("crate", new CrateCreateInventory(this));
+        getServer().getPluginManager().registerEvents(new PlayerJoinListener(crateService, this), this);
+        crateService.registerInventory(InventoryTypes.MAIN.name(), new CrateCreateInventory(this, crateService));
     }
 
     @Override
     public void onDisable() {
-        crateService.unregisterInventory("crate");
+        crateService.unregisterInventory(InventoryTypes.MAIN.name());
     }
 
 
