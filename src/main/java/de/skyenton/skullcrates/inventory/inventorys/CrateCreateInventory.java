@@ -1,9 +1,11 @@
 package de.skyenton.skullcrates.inventory.inventorys;
 
+import de.skyenton.skullcrates.crate.Crate;
 import de.skyenton.skullcrates.inventory.ActionItem;
 import de.skyenton.skullcrates.inventory.CrateInventory;
 import de.skyenton.skullcrates.inventory.CratePage;
 import de.skyenton.skullcrates.services.CrateService;
+import de.skyenton.skullcrates.utils.ItemBuilder;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
@@ -21,17 +23,24 @@ public class CrateCreateInventory extends CrateInventory {
 
     @Override
     public void onCreate() {
-        CratePage page1 = new CratePage("§e§lCrate§7- §aErstellen - Page1", 9*3);
+        CratePage page1 = new CratePage("§e§lCrate§7- §aErstellen - Erstellen", 9*3);
         page1.addItem(new ItemStack(Material.GLASS, 1));
-        ActionItem item1 = new ActionItem(new ItemStack(Material.STAINED_CLAY, 1)) {
+        page1.setBoarderLayout();
+        page1.addItem(new ItemBuilder("§4Create", Material.EMERALD_ORE, (short) 0, 1).build());
+        ActionItem item1 = new ActionItem(new ItemStack(Material.GLOWSTONE, 1)) {
             @Override
             public void onItemClick(ItemStack item) {
-                openPage(getNextPage());
+                Crate crate = new Crate();
+                crate.setSkull("MorrisBr");
+                crate.setName("test");
+                System.out.println(crate);
+                getCrateService().getCrateSaver().saveCreate(crate);
+                getInvOwner().sendMessage(getCrateService().getCrateLoader().loadCratebyName("test").getName());
+                //getInvOwner().closeInventory();
             }
         };
         page1.addActionItem(item1);
         addPage(page1);
-        page1.fillInventory(new ItemStack(Material.STAINED_GLASS));
 
 
         CratePage page2 = new CratePage("§e§lEnton§6Crates - Page2", 9*3);
@@ -39,7 +48,11 @@ public class CrateCreateInventory extends CrateInventory {
         ActionItem item2 = new ActionItem(new ItemStack(Material.GLOWSTONE, 1)) {
             @Override
             public void onItemClick(ItemStack item) {
-                openPage(getBackPage());
+                //openPage(getBackPage());
+                Crate crate = new Crate();
+                crate.setSkull("MorrisBr");
+                crate.setName("test");
+                getCrateService().getCrateSaver().saveCreate(crate);
             }
         };
         page2.addActionItem(item2);
@@ -69,7 +82,7 @@ public class CrateCreateInventory extends CrateInventory {
     @Override
     public void onClick(CratePage clickedPage, ItemStack currentItem, InventoryClickEvent event) {
 
-        //event.setCancelled(true);
+        event.setCancelled(true);
 
 
         if(!currentItem.hasItemMeta()) return;

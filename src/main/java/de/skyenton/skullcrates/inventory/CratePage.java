@@ -4,6 +4,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.ArrayList;
 
@@ -50,6 +51,10 @@ public class CratePage {
 
     public void addItem(ItemStack itemStack) {
         getInventory().addItem(itemStack);
+    }
+
+    public void setItem(int slot, ItemStack itemStack) {
+        getInventory().setItem(slot, itemStack);
     }
 
     public void addActionItem(ActionItem actionItem) {
@@ -107,6 +112,41 @@ public class CratePage {
                 getInventory().setItem(index, itemStack);
             }
         }
+    }
+
+    public void setBoarderLayout() {
+        ItemStack itemFirst = new ItemStack(Material.STAINED_GLASS_PANE, 1, (short) 3);
+        ItemMeta itemMetaFirst = itemFirst.getItemMeta();
+        itemMetaFirst.setDisplayName(" ");
+        itemFirst.setItemMeta(itemMetaFirst);
+
+        ItemStack itemNext = new ItemStack(Material.STAINED_GLASS_PANE, 1, (short) 11);
+        ItemMeta itemMetaNext = itemNext.getItemMeta();
+        itemMetaNext.setDisplayName(" ");
+        itemNext.setItemMeta(itemMetaNext);
+
+        setItem(0, itemFirst);
+        setItem(1, itemNext);
+        setItem(2, itemFirst);
+        setItem(3, itemNext);
+        setItem(4, itemFirst);
+        setItem(5, itemNext);
+        setItem(6, itemFirst);
+        setItem(7, itemNext);
+        setItem(8, itemFirst);
+
+        setItem(9, itemNext);
+        setItem(17, itemNext);
+
+        setItem(18, itemFirst);
+        setItem(19, itemNext);
+        setItem(20, itemNext);
+        setItem(21, itemFirst);
+        setItem(22, itemNext);
+        setItem(23, itemFirst);
+        setItem(24, itemNext);
+        setItem(25, itemNext);
+        setItem(26, itemFirst);
     }
 
 

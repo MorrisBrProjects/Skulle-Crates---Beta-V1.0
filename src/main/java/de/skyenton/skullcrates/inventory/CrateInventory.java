@@ -18,6 +18,7 @@ import java.util.UUID;
 public abstract class CrateInventory implements Listener {
 
     private int currentPage;
+
     private HashMap<Integer, CratePage> pages = new HashMap<>();
     private JavaPlugin plugin;
     private CrateService crateService;
@@ -132,6 +133,10 @@ public abstract class CrateInventory implements Listener {
         return pages.get(getCurrentPageAsCount()-1);
     }
 
+    public CratePage getPage(int index) {
+        return pages.get(index);
+    }
+
     public void openPage(CratePage page) {
         for (UUID uuid : crateService.getUsedInventorys().keySet()) {
             if(crateService.getUsedInventorys().get(uuid).equals(this)) {
@@ -179,6 +184,15 @@ public abstract class CrateInventory implements Listener {
         }
     }
 
+    public Player getInvOwner() {
+        for (UUID uuid : crateService.getUsedInventorys().keySet()) {
+            if (crateService.getUsedInventorys().get(uuid).equals(this)) {
+                return Bukkit.getPlayer(uuid);
+            }
+        }
+        return null;
+    }
+
     public void close() {
         for (UUID uuid : crateService.getUsedInventorys().keySet()) {
             if (crateService.getUsedInventorys().get(uuid).equals(this)) {
@@ -187,6 +201,18 @@ public abstract class CrateInventory implements Listener {
                 break;
             }
         }
+    }
+
+    public HashMap<Integer, CratePage> getPages() {
+        return pages;
+    }
+
+    public JavaPlugin getPlugin() {
+        return plugin;
+    }
+
+    public CrateService getCrateService() {
+        return crateService;
     }
 
 }

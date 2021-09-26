@@ -18,13 +18,17 @@ public class CrateService {
 
     private final ArrayList<Crate> crates = new ArrayList<>();
 
+    private final HashMap<UUID, Crate> cratesInMaking = new HashMap<>();
+
     private SkullcratesPlugin cratePlugin;
 
-    private CrateConfigLoader crateLoader = new CrateConfigLoader(this);
-    private CrateConfigSaver crateSaver = new CrateConfigSaver(this);
+    private CrateConfigLoader crateLoader;
+    private CrateConfigSaver crateSaver;
 
     public CrateService(SkullcratesPlugin cratePlugin) {
         this.cratePlugin = cratePlugin;
+        this.crateSaver = new CrateConfigSaver(this);
+        this.crateLoader = new CrateConfigLoader(this);
     }
 
 
@@ -113,5 +117,16 @@ public class CrateService {
 
     public CrateConfigSaver getCrateSaver() {
         return crateSaver;
+    }
+
+    public boolean isPlayersCrateFinish(Player player) {
+        Crate crate = getCratesInMaking().get(player.getUniqueId());
+        if(crate.getName() == null || crate.getSkull() == null || crate.getDisplayName() == null || crate.getItems().isEmpty()) {
+            return false;
+        } else return true;
+    }
+
+    public HashMap<UUID, Crate> getCratesInMaking() {
+        return cratesInMaking;
     }
 }

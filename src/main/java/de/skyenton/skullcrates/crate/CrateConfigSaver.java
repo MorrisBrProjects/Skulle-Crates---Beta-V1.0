@@ -14,6 +14,7 @@ public class CrateConfigSaver {
     }
 
     public void saveCreate(Crate crate) {
+        System.out.println(fileHandler);
         fileHandler.getConfig("CrateData.yml").get().set("Crates." + crate.getName(), crate);
         fileHandler.getConfig("CrateData.yml").save();
     }
