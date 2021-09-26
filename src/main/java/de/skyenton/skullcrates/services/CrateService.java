@@ -1,25 +1,45 @@
 package de.skyenton.skullcrates.services;
 
+import de.skyenton.skullcrates.crate.Crate;
 import de.skyenton.skullcrates.inventory.CrateInventory;
-import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
-import org.bukkit.scheduler.BukkitRunnable;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.UUID;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
 
 public class CrateService {
 
     private HashMap<String, CrateInventory> crateInventorys = new HashMap<>();
+    private HashMap<UUID, CrateInventory> usedInventorys = new HashMap<>();
+
+    private ArrayList<Crate> crates = new ArrayList<>();
+
+    public ArrayList<Crate> getCrates() {
+        return crates;
+    }
+
+    public Crate getCrateByName(String name) {
+        for (Crate crate : getCrates()) {
+            if(crate.getName().equals(name)) {
+                return crate;
+            }
+        }
+        return null;
+    }
+
+    public Crate getCrateByDisplayName(String displayName) {
+        for (Crate crate : getCrates()) {
+            if(crate.getDisplayName().equals(displayName)) {
+                return crate;
+            }
+        }
+        return null;
+    }
 
     public HashMap<UUID, CrateInventory> getUsedInventorys() {
         return usedInventorys;
     }
-
-    private HashMap<UUID, CrateInventory> usedInventorys = new HashMap<>();
 
     public void registerInventory(String nameID, CrateInventory crateInventory) {
         crateInventorys.put(nameID, crateInventory);

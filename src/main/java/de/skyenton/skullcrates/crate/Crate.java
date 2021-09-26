@@ -8,7 +8,9 @@ import java.util.List;
 public class Crate {
 
     private String name;
+    private String displayName;
     private String skullName;
+    private ItemStack item;
     private ArrayList<String> lore = new ArrayList<>();
     private ArrayList<ItemStack> items = new ArrayList<>();
 
@@ -42,6 +44,22 @@ public class Crate {
 
     public void setItems(ArrayList<ItemStack> items) {
         this.items = items;
+    }
+
+    public ItemStack getItem() {
+        return item;
+    }
+
+    public void setItem(ItemStack item) {
+        this.item = item;
+    }
+
+    public String getDisplayName() {
+        return displayName;
+    }
+
+    public void setDisplayName(String displayName) {
+        this.displayName = displayName;
     }
 
 }
