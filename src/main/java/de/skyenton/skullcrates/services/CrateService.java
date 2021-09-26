@@ -14,6 +14,11 @@ import java.util.concurrent.TimeUnit;
 public class CrateService {
 
     private HashMap<String, CrateInventory> crateInventorys = new HashMap<>();
+
+    public HashMap<UUID, CrateInventory> getUsedInventorys() {
+        return usedInventorys;
+    }
+
     private HashMap<UUID, CrateInventory> usedInventorys = new HashMap<>();
 
     public void registerInventory(String nameID, CrateInventory crateInventory) {
@@ -27,9 +32,18 @@ public class CrateService {
     }
 
     public void openRegistedInventory(String nameID, Player player) {
+        HashMap<String, CrateInventory> crateInv = (HashMap<String, CrateInventory>)crateInventorys.clone();
+        crateInv.get(nameID).onOpen(player);
+        usedInventorys.put(player.getUniqueId(), crateInv.get(nameID));
+        //System.out.println(crateInv.get(nameID).getCurrentPage().getInventory().getTitle());
+       // player.openInventory(Bukkit.createInventory(null, 9*3, "test"));
+        player.openInventory(crateInv.get(nameID).getCurrentPage().getInventory());
+    }
+
+    public void openSyncInventory(String nameID, Player player) {
         crateInventorys.get(nameID).onOpen(player);
         System.out.println(crateInventorys.get(nameID).getCurrentPage().getInventory().getTitle());
-       // player.openInventory(Bukkit.createInventory(null, 9*3, "test"));
+        // player.openInventory(Bukkit.createInventory(null, 9*3, "test"));
         player.openInventory(getRegistedCrateInventory(nameID).getCurrentPage().getInventory());
     }
 

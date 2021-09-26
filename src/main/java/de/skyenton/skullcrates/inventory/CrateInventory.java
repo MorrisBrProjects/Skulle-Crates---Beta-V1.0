@@ -2,6 +2,7 @@ package de.skyenton.skullcrates.inventory;
 
 import de.skyenton.skullcrates.SkullcratesPlugin;
 import de.skyenton.skullcrates.services.CrateService;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.HandlerList;
@@ -45,6 +46,9 @@ public abstract class CrateInventory implements Listener {
     public abstract void onUnRegister();
     public abstract void onClickInInventory(CratePage clickedPage, ItemStack currentItem, InventoryClickEvent event);
     public abstract void onClick(CratePage clickedPage, ItemStack currentItem, InventoryClickEvent event);
+    public abstract void onNextPage(CratePage lastPage, CratePage newPage, int lastPageCount);
+    public abstract void onBackPage(CratePage lastPage, CratePage newPage, int lastPageCount);
+    public abstract void onSetPage(CratePage lastPage, CratePage newPage, int lastPageCount);
 
 
     @EventHandler
@@ -58,6 +62,20 @@ public abstract class CrateInventory implements Listener {
             onClickInInventory(getCurrentPage(), event.getCurrentItem(), event);
         }
 
+
+        if(event.getInventory() != null
+                && event.getClickedInventory() != null
+                && event.getCurrentItem() != null && crateService.getOpenedCrateInventory(event.getWhoClicked().getUniqueId()) != null
+                && crateService.getOpenedCrateInventory(event.getWhoClicked().getUniqueId()).getCurrentPage().getTitle().
+                equals(event.getClickedInventory().
+                        getTitle())) {
+
+            if(getCurrentPage().isActionItem(event.getCurrentItem()) && event.getCurrentItem().isSimilar(getCurrentPage().getActionItem(event.getCurrentItem()).getItem())) {
+                onActionItemClick(getCurrentPage(), getCurrentPage().getActionItem(event.getCurrentItem()), event);
+                getCurrentPage().getActionItem(event.getCurrentItem()).onItemClick(event.getCurrentItem());
+            }
+        }
+
         if(event.getInventory() != null
                 && event.getClickedInventory() != null
                 && event.getCurrentItem() != null && crateService.getOpenedCrateInventory(event.getWhoClicked().getUniqueId()) != null
@@ -67,6 +85,8 @@ public abstract class CrateInventory implements Listener {
             onClick(getCurrentPage(), event.getCurrentItem(), event);
         }
     }
+
+    protected abstract void onActionItemClick(CratePage currentPage, ActionItem actionItem, InventoryClickEvent event);
 
     @EventHandler
     public void onCloseEvent(InventoryCloseEvent event) {
@@ -95,10 +115,12 @@ public abstract class CrateInventory implements Listener {
     }
 
     public void nextPage() {
+        onNextPage(getCurrentPage(), getNextPage(), getCurrentPageAsCount());
         currentPage++;
     }
 
     public void backPage(UUID playerUuid) {
+        onBackPage(getCurrentPage(), getBackPage(), getCurrentPageAsCount());
         currentPage--;
     }
 
@@ -110,16 +132,61 @@ public abstract class CrateInventory implements Listener {
         return pages.get(getCurrentPageAsCount()-1);
     }
 
-    public void addPage(CratePage page) {
-        pages.put(pages.size()+1, page);
+    public void openPage(CratePage page) {
+        for (UUID uuid : crateService.getUsedInventorys().keySet()) {
+            if(crateService.getUsedInventorys().get(uuid).equals(this)) {
+                //Bukkit.getPlayer(uuid).closeInventory();
+                Bukkit.getPlayer(uuid).openInventory(page.getInventory());
+
+                for (Integer index : pages.keySet()) {
+                    if(pages.get(index).equals(page)) {
+                        currentPage = index;
+                        break;
+                    }
+                }
+                break;
+            }
+        }
     }
 
-    public void setPage(int index, CratePage page) {
-        pages.put(index, page);
+    public void addPage(CratePage page) {
+        if(!pages.isEmpty()) {
+            System.out.println(pages.size());
+            pages.put(pages.size(), page);
+        } else {
+            System.out.println(pages.size() + "df");
+            pages.put(0, page);
+        }
+    }
+
+    public void setPage(int index) {
+        onSetPage(getCurrentPage(), pages.get(index), getCurrentPageAsCount());
+        this.currentPage = index;
+    }
+
+    /**
+    Close inventory, but not the GUI.
+    Player will removed in Inventory Open Temp!
+     **/
+    public void closeTempInventory() {
+        for (UUID uuid : crateService.getUsedInventorys().keySet()) {
+            if (crateService.getUsedInventorys().get(uuid).equals(this)) {
+                crateService.getUsedInventorys().remove(uuid, this);
+                System.out.println("gfjhgzhkgh");
+                currentPage = 0; //copierte liste muss ich zugreifen zum bearbeiten / löschen
+                break;
+            }
+        }
     }
 
     public void close() {
-        player.closeInventory();
+        for (UUID uuid : crateService.getUsedInventorys().keySet()) {
+            if (crateService.getUsedInventorys().get(uuid).equals(this)) {
+                Bukkit.getPlayer(uuid).closeInventory();
+                crateService.getUsedInventorys().remove(uuid);
+                break;
+            }
+        }
     }
 
 }

@@ -1,5 +1,6 @@
 package de.skyenton.skullcrates;
 
+import de.skyenton.skullcrates.commands.CratesExecutor;
 import de.skyenton.skullcrates.config.FileHandler;
 import de.skyenton.skullcrates.inventory.CrateInventory;
 import de.skyenton.skullcrates.inventory.inventorys.CrateCreateInventory;
@@ -17,6 +18,7 @@ public final class SkullcratesPlugin extends JavaPlugin {
     @Override
     public void onEnable() {
         getServer().getPluginManager().registerEvents(new PlayerJoinListener(crateService, this), this);
+        getServer().getPluginCommand("crate").setExecutor(new CratesExecutor(crateService));
         crateService.registerInventory(InventoryTypes.MAIN.name(), new CrateCreateInventory(this, crateService));
     }
 

@@ -4,3 +4,6 @@ main: de.skyenton.skullcrates.SkullcratesPlugin
 authors: [ SkyEnton, MorrisBr, H565656 ]
 description: Crate System für diverse Server von SkyEnton
 website: SkyEnton.de
+
+commands:
+  crate:
