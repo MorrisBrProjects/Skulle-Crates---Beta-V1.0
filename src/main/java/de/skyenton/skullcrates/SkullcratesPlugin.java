@@ -12,8 +12,8 @@ import org.bukkit.plugin.java.JavaPlugin;
 public final class SkullcratesPlugin extends JavaPlugin {
 
 
-    private CrateService crateService = new CrateService();
-    private FileHandler fileHandler = new FileHandler(this);
+    private CrateService crateService = new CrateService(this);
+    private final FileHandler fileHandler = new FileHandler(this);
 
     @Override
     public void onEnable() {

@@ -1,6 +1,9 @@
 package de.skyenton.skullcrates.services;
 
+import de.skyenton.skullcrates.SkullcratesPlugin;
 import de.skyenton.skullcrates.crate.Crate;
+import de.skyenton.skullcrates.crate.CrateConfigLoader;
+import de.skyenton.skullcrates.crate.CrateConfigSaver;
 import de.skyenton.skullcrates.inventory.CrateInventory;
 import org.bukkit.entity.Player;
 
@@ -11,9 +14,19 @@ import java.util.UUID;
 public class CrateService {
 
     private HashMap<String, CrateInventory> crateInventorys = new HashMap<>();
-    private HashMap<UUID, CrateInventory> usedInventorys = new HashMap<>();
+    private final HashMap<UUID, CrateInventory> usedInventorys = new HashMap<>();
 
-    private ArrayList<Crate> crates = new ArrayList<>();
+    private final ArrayList<Crate> crates = new ArrayList<>();
+
+    private SkullcratesPlugin cratePlugin;
+
+    private CrateConfigLoader crateLoader = new CrateConfigLoader(this);
+    private CrateConfigSaver crateSaver = new CrateConfigSaver(this);
+
+    public CrateService(SkullcratesPlugin cratePlugin) {
+        this.cratePlugin = cratePlugin;
+    }
+
 
     public ArrayList<Crate> getCrates() {
         return crates;
@@ -88,5 +101,17 @@ public class CrateService {
 
     public void setCrateInventorys(HashMap<String, CrateInventory> crateInventorys) {
         this.crateInventorys = crateInventorys;
+    }
+
+    public SkullcratesPlugin getCratePlugin() {
+        return cratePlugin;
+    }
+
+    public CrateConfigLoader getCrateLoader() {
+        return crateLoader;
+    }
+
+    public CrateConfigSaver getCrateSaver() {
+        return crateSaver;
     }
 }
