@@ -28,7 +28,14 @@ public class CrateCreateInventory extends CrateInventory {
         CratePage page1 = new CratePage("§e§lCrate§7- §aErstellen - Erstellen", 9*3);
         page1.addItem(new ItemStack(Material.GLASS, 1));
         page1.setBoarderLayout();
-        page1.addItem(new ItemBuilder("§7Itemname", Material.NAME_TAG, (short) 0, 1).build());
+        ActionItem nameAction1 = new ActionItem(new ItemBuilder("§7Itemname", Material.NAME_TAG, (short) 0, 1).build()) {
+            @Override
+            public void onItemClick(ItemStack item) {
+                getInvOwner().sendMessage("§aGeben sie im Chat den Namen ein!");
+                getInvOwner().closeInventory();
+            }
+        };
+        page1.addActionItem(nameAction1);
         page1.addItem(new ItemBuilder("§7Lore", Material.BOOK_AND_QUILL, (short) 0, 1).build());
         page1.addItem(new ItemBuilder("§7SkullName", Material.SKULL_ITEM, (short) 0, 1).build());
         ActionItem itemsAction1 = new ActionItem(new ItemBuilder("§7Items", Material.CHEST, (short) 0, 1).build()) {
