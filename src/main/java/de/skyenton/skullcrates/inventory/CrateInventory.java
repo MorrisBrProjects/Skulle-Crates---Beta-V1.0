@@ -1,6 +1,5 @@
 package de.skyenton.skullcrates.inventory;
 
-import de.skyenton.skullcrates.SkullcratesPlugin;
 import de.skyenton.skullcrates.services.CrateService;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -111,7 +110,7 @@ public abstract class CrateInventory implements Listener {
         return pages.get(currentPage);
     }
 
-    public Integer getCurrentPageAsCount() {
+    public int getCurrentPageAsCount() {
         return currentPage;
     }
 
@@ -141,15 +140,15 @@ public abstract class CrateInventory implements Listener {
         for (UUID uuid : crateService.getUsedInventorys().keySet()) {
             if(crateService.getUsedInventorys().get(uuid).equals(this)) {
                 //Bukkit.getPlayer(uuid).closeInventory();
+
+
                 Bukkit.getPlayer(uuid).openInventory(page.getInventory());
 
                 for (Integer index : pages.keySet()) {
                     if(pages.get(index).equals(page)) {
                         currentPage = index;
-                        break;
                     }
                 }
-                break;
             }
         }
     }

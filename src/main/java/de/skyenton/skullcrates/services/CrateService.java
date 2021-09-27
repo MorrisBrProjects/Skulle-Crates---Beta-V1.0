@@ -129,4 +129,21 @@ public class CrateService {
     public HashMap<UUID, Crate> getCratesInMaking() {
         return cratesInMaking;
     }
+
+    public void addMakingCrate(Crate crate, Player player) {
+        getCratesInMaking().put(player.getUniqueId(), crate);
+    }
+
+    public void removeMakingCrate(Player player) {
+        getCratesInMaking().remove(player.getUniqueId());
+    }
+
+    public void createCrate(Crate crate) {
+        getCrates().add(crate);
+        getCrateSaver().saveCreate(crate);
+    }
+    public void deleteCrate(Crate crate) {
+        getCrateSaver().delete(crate);
+        getCrates().remove(crate);
+    }
 }

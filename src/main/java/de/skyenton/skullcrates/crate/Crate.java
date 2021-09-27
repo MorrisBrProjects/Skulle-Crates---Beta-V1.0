@@ -19,7 +19,7 @@ public class Crate implements ConfigurationSerializable {
     private String skullName;
     private ItemStack skull;
     private ArrayList<String> lore = new ArrayList<>();
-    private ArrayList<ItemStack> items = new ArrayList<>();
+    private List<ItemStack> items = new ArrayList<>();
 
     public String getName() {
         return name;
@@ -37,7 +37,7 @@ public class Crate implements ConfigurationSerializable {
         this.skullName = skullName;
     }
 
-    public ArrayList<String> getLore() {
+    public List<String> getLore() {
         return lore;
     }
 
@@ -45,11 +45,11 @@ public class Crate implements ConfigurationSerializable {
         this.lore = lore;
     }
 
-    public ArrayList<ItemStack> getItems() {
+    public List<ItemStack> getItems() {
         return items;
     }
 
-    public void setItems(ArrayList<ItemStack> items) {
+    public void setItems(List<ItemStack> items) {
         this.items = items;
     }
 

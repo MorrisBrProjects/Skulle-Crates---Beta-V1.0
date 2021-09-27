@@ -13,6 +13,8 @@ import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.util.Arrays;
+
 public class CrateCreateInventory extends CrateInventory {
 
     public CrateCreateInventory(JavaPlugin plugin, CrateService crateService) {
@@ -26,21 +28,55 @@ public class CrateCreateInventory extends CrateInventory {
         CratePage page1 = new CratePage("§e§lCrate§7- §aErstellen - Erstellen", 9*3);
         page1.addItem(new ItemStack(Material.GLASS, 1));
         page1.setBoarderLayout();
-        page1.addItem(new ItemBuilder("§4Create", Material.EMERALD_ORE, (short) 0, 1).build());
-        ActionItem item1 = new ActionItem(new ItemStack(Material.GLOWSTONE, 1)) {
+        page1.addItem(new ItemBuilder("§7Itemname", Material.NAME_TAG, (short) 0, 1).build());
+        page1.addItem(new ItemBuilder("§7Lore", Material.BOOK_AND_QUILL, (short) 0, 1).build());
+        page1.addItem(new ItemBuilder("§7SkullName", Material.SKULL_ITEM, (short) 0, 1).build());
+        ActionItem itemsAction1 = new ActionItem(new ItemBuilder("§7Items", Material.CHEST, (short) 0, 1).build()) {
             @Override
             public void onItemClick(ItemStack item) {
-                Crate crate = new Crate();
-                crate.setSkull("MorrisBr");
-                crate.setName("test");
-                System.out.println(crate);
-                getCrateService().getCrateSaver().saveCreate(crate);
-                getInvOwner().sendMessage(getCrateService().getCrateLoader().loadCratebyName("test").getName());
+                // Crate crate = new Crate();
+                // crate.setSkull("MorrisBr");
+                //crate.setName("test");
+                // System.out.println(crate);
+                // getCrateService().getCrateSaver().saveCreate(crate);
+                // getInvOwner().sendMessage(getCrateService().getCrateLoader().loadCratebyName("test").getName());
                 //getInvOwner().closeInventory();
+                openPage(getPage(2));
             }
         };
-        page1.addActionItem(item1);
-        addPage(page1);
+        page1.addActionItem(itemsAction1);
+        ActionItem createAction1 = new ActionItem(new ItemBuilder("§aErstellen", Material.CONCRETE, (short) 5, 1).build()) {
+            @Override
+            public void onItemClick(ItemStack item) {
+                Crate crate = getCrateService().getCratesInMaking().get(getInvOwner().getUniqueId());
+
+                if(getCrateService().isPlayersCrateFinish(getInvOwner())) {
+                    getCrateService().createCrate(crate);
+                } else {
+                    getInvOwner().sendMessage("§cDiese Crate ist nicht komplett!");
+                }
+            }
+        };
+        page1.addActionItem(createAction1);
+        page1.addItem(new ItemBuilder("§6Abbrechen", Material.CONCRETE, (short) 4, 1).build());
+        ActionItem verwerfenAction1 = new ActionItem(new ItemBuilder("§cVerwerfen", Material.CONCRETE, (short) 14, 1).build()) {
+            @Override
+            public void onItemClick(ItemStack item) {
+                if(getCrateService().getCratesInMaking().containsKey(getInvOwner().getUniqueId())) {
+                    Crate crate = getCrateService().getCratesInMaking().get(getInvOwner().getUniqueId());
+                    getCrateService().removeMakingCrate(getInvOwner());
+                    getPage(2).getInventory().clear();
+                    getInvOwner().closeInventory();
+                    getInvOwner().sendMessage("§aDu hast die Crate verworfen!");
+                } else {
+                    getInvOwner().sendMessage("§cDu Bist aktuell keine Crate im Editieren!");
+                    getInvOwner().closeInventory();
+                }
+            }
+        };
+        page1.addActionItem(verwerfenAction1);
+
+
 
 
         CratePage page2 = new CratePage("§e§lEnton§6Crates - Page2", 9*3);
@@ -49,20 +85,22 @@ public class CrateCreateInventory extends CrateInventory {
             @Override
             public void onItemClick(ItemStack item) {
                 //openPage(getBackPage());
-                Crate crate = new Crate();
-                crate.setSkull("MorrisBr");
-                crate.setName("test");
-                getCrateService().getCrateSaver().saveCreate(crate);
+                //getCrateService().addMakingCrate(new Crate(), getInvOwner());
             }
         };
         page2.addActionItem(item2);
 
+
+        CratePage page3 = new CratePage("§e§lCrate§7- §aItems", 9*1);
+
+        addPage(page1);
         addPage(page2);
+        addPage(page3);
     }
 
     @Override
     public void onOpen(Player uuid) {
-
+        getCrateService().addMakingCrate(new Crate(), uuid);
     }
 
     @Override
@@ -82,7 +120,9 @@ public class CrateCreateInventory extends CrateInventory {
     @Override
     public void onClick(CratePage clickedPage, ItemStack currentItem, InventoryClickEvent event) {
 
-        event.setCancelled(true);
+        if(getCurrentPageAsCount() != 2) {
+            event.setCancelled(true);
+        }
 
 
         if(!currentItem.hasItemMeta()) return;
@@ -126,9 +166,13 @@ public class CrateCreateInventory extends CrateInventory {
         System.out.println("close");
         System.out.println(getCurrentPage().getTitle() + " closed");
 
-        //if(getCurrentPageAsCount() == 1) {
-         //   closeTempInventory();
-        //}
+
+        if(getCurrentPageAsCount() == 2) {
+            Crate crate = getCrateService().getCratesInMaking().get(getInvOwner().getUniqueId());
+            crate.setItems(Arrays.asList(getPage(2).getInventory().getContents()));
+            getInvOwner().sendMessage("§aInventar wurde gespeichert!");
+            setPage(0);
+        }
 
     }
 }
