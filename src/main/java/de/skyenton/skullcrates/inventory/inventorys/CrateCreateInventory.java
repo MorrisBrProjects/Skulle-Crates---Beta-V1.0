@@ -1,6 +1,7 @@
 package de.skyenton.skullcrates.inventory.inventorys;
 
 import de.skyenton.skullcrates.crate.Crate;
+import de.skyenton.skullcrates.crate.ToSetTypes;
 import de.skyenton.skullcrates.inventory.ActionItem;
 import de.skyenton.skullcrates.inventory.CrateInventory;
 import de.skyenton.skullcrates.inventory.CratePage;
@@ -25,19 +26,32 @@ public class CrateCreateInventory extends CrateInventory {
 
     @Override
     public void onCreate() {
-        CratePage page1 = new CratePage("§e§lCrate§7- §aErstellen - Erstellen", 9*3);
+        CratePage page1 = new CratePage("§e§lCrate§7- §aErstellen", 9*3);
         page1.addItem(new ItemStack(Material.GLASS, 1));
         page1.setBoarderLayout();
         ActionItem nameAction1 = new ActionItem(new ItemBuilder("§7Itemname", Material.NAME_TAG, (short) 0, 1).build()) {
             @Override
             public void onItemClick(ItemStack item) {
+
+                Crate crate = getCrateService().getCratesInMaking().get(getInvOwner().getUniqueId());
+                crate.setCurrentToSet(ToSetTypes.DISPLAYNAME);
+
                 getInvOwner().sendMessage("§aGeben sie im Chat den Namen ein!");
                 getInvOwner().closeInventory();
             }
         };
         page1.addActionItem(nameAction1);
         page1.addItem(new ItemBuilder("§7Lore", Material.BOOK_AND_QUILL, (short) 0, 1).build());
-        page1.addItem(new ItemBuilder("§7SkullName", Material.SKULL_ITEM, (short) 0, 1).build());
+        ActionItem skullAction1 = new ActionItem(new ItemBuilder("§7SkullName", Material.SKULL_ITEM, (short) 0, 1).build()) {
+            @Override
+            public void onItemClick(ItemStack item) {
+                Crate crate = getCrateService().getCratesInMaking().get(getInvOwner().getUniqueId());
+                crate.setCurrentToSet(ToSetTypes.SKULL);
+                getInvOwner().closeInventory();
+                getInvOwner().sendMessage("§aGeben sie im Chat den Skull Namen ein!");
+            }
+        };
+        page1.addActionItem(skullAction1);
         ActionItem itemsAction1 = new ActionItem(new ItemBuilder("§7Items", Material.CHEST, (short) 0, 1).build()) {
             @Override
             public void onItemClick(ItemStack item) {
@@ -57,8 +71,11 @@ public class CrateCreateInventory extends CrateInventory {
             public void onItemClick(ItemStack item) {
                 Crate crate = getCrateService().getCratesInMaking().get(getInvOwner().getUniqueId());
 
+                    crate.getLore().add("Nur bypass zum Testen!");
+                System.out.println(crate.getSkull());
                 if(getCrateService().isPlayersCrateFinish(getInvOwner())) {
                     getCrateService().createCrate(crate);
+                    getInvOwner().getInventory().addItem(crate.getCrateItem());
                 } else {
                     getInvOwner().sendMessage("§cDiese Crate ist nicht komplett!");
                 }
@@ -107,7 +124,7 @@ public class CrateCreateInventory extends CrateInventory {
 
     @Override
     public void onOpen(Player uuid) {
-        getCrateService().addMakingCrate(new Crate(), uuid);
+        //getCrateService().addMakingCrate(new Crate(), uuid);
     }
 
     @Override

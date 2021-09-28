@@ -4,6 +4,7 @@ import org.bukkit.Material;
 import org.bukkit.SkullType;
 import org.bukkit.configuration.serialization.ConfigurationSerializable;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.material.Skull;
 
@@ -18,8 +19,14 @@ public class Crate implements ConfigurationSerializable {
     private String displayName;
     private String skullName;
     private ItemStack skull;
+
+
+
+    private ItemStack crateItem;
     private ArrayList<String> lore = new ArrayList<>();
     private List<ItemStack> items = new ArrayList<>();
+
+    private ToSetTypes currentToSet;
 
     public String getName() {
         return name;
@@ -86,4 +93,25 @@ public class Crate implements ConfigurationSerializable {
         return map;
     }
 
+    public ToSetTypes getCurrentToSet() {
+        return currentToSet;
+    }
+
+    public void setCurrentToSet(ToSetTypes currentToSet) {
+        this.currentToSet = currentToSet;
+    }
+
+    public ItemStack getCrateItem() {
+        this.crateItem = getSkull().clone();
+        ItemMeta meta = crateItem.getItemMeta();
+        meta.setDisplayName(getDisplayName());
+        meta.setLore(getLore());
+        this.crateItem.setItemMeta(meta);
+
+        return crateItem;
+    }
+
+    public void setCrateItem(ItemStack crateItem) {
+        this.crateItem = crateItem;
+    }
 }
