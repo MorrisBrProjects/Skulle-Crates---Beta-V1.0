@@ -9,6 +9,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
@@ -31,6 +32,7 @@ public class PlayerInteractListener implements Listener {
             if(event.getAction() == Action.RIGHT_CLICK_AIR || event.getAction() == Action.RIGHT_CLICK_BLOCK) {
                 if(crateService.getCrateByDisplayName(event.getItem().getItemMeta().getDisplayName()) != null) {
 
+                    if(event.getHand() == EquipmentSlot.OFF_HAND) return;
                     event.setCancelled(true);
 
                     ItemStack item = crateService.getCrateByDisplayName(event.getItem().getItemMeta().getDisplayName()).getCrateItem();
@@ -42,10 +44,14 @@ public class PlayerInteractListener implements Listener {
                         player.getInventory().addItem(randomItem);
                     }
                     player.sendMessage("§aCrate geöffnet!");
-                    player.sendTitle("³7§m--§8 §c§lCrate §7§m--", "§7§m--§8 §a§lwurde geöffnet §7§m--", 15, 45, 25);
+                    player.sendTitle("§7§m--§8 §c§lCrate §7§m--", "§7§m--§8 §a§lwurde geöffnet §7§m--", 15, 45, 25);
+                    player.getItemInHand().setAmount(player.getItemInHand().getAmount()-1);
+
                 }
             } else if(event.getAction() == Action.LEFT_CLICK_AIR || event.getAction() == Action.LEFT_CLICK_BLOCK) {
                 if(crateService.getCrateByDisplayName(event.getItem().getItemMeta().getDisplayName()) != null) {
+
+                    if(event.getHand() == EquipmentSlot.OFF_HAND) return;
                     event.setCancelled(true);
 
                     ItemStack item = crateService.getCrateByDisplayName(event.getItem().getItemMeta().getDisplayName()).getCrateItem();
