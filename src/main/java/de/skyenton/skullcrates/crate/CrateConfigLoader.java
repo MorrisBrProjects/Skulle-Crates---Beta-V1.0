@@ -37,8 +37,10 @@ public class CrateConfigLoader {
     public ArrayList<Crate> loadAllCrates() {
         ArrayList<Crate> crates = new ArrayList<>();
         for (String crate : fileHandler.getConfig("CrateData.yml").get().getConfigurationSection("Crates").getKeys(false)) {
+            System.out.println(crate);
             crates.add((Crate) fileHandler.getConfig("CrateData.yml").get().get("Crates." + crate));
         }
+        System.out.println(crates);
         return crates;
     }
 

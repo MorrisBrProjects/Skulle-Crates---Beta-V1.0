@@ -8,6 +8,9 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class PlayerChatListener implements Listener {
 
     private CrateService crateService;
@@ -31,7 +34,7 @@ public class PlayerChatListener implements Listener {
                 switch (crate.getCurrentToSet()) {
                     case DISPLAYNAME:
                         event.setCancelled(true);
-                        crate.setDisplayName(event.getMessage());
+                        crate.setDisplayName(event.getMessage().replaceAll("&", "§"));
                         crate.setCurrentToSet(ToSetTypes.NONE);
                         player.sendMessage("§aDisplayname " + crate.getDisplayName() + " §f§agesetzt!");
                         break;
@@ -39,7 +42,15 @@ public class PlayerChatListener implements Listener {
                         event.setCancelled(true);
                         crate.setSkull(event.getMessage());
                         crate.setCurrentToSet(ToSetTypes.NONE);
-                        player.sendMessage("§Skullname " + crate.getSkullName() + " §f§agesetzt!");
+                        player.sendMessage("§aSkullname " + crate.getSkullName() + " §f§agesetzt!");
+                        break;
+                    case LORE:
+                        event.setCancelled(true);
+                        List<String> lore = new ArrayList<>();
+                        lore.add(event.getMessage().replaceAll("&", "§"));
+                        crate.setLore(lore);
+                        crate.setCurrentToSet(ToSetTypes.NONE);
+                        player.sendMessage("§aLore §f§agesetzt!");
                         break;
                     default:
                         break;

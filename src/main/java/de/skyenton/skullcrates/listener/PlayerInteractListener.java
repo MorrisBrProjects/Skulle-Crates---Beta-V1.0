@@ -2,12 +2,14 @@ package de.skyenton.skullcrates.listener;
 
 import de.skyenton.skullcrates.crate.Crate;
 import de.skyenton.skullcrates.services.CrateService;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.Random;
@@ -40,6 +42,20 @@ public class PlayerInteractListener implements Listener {
                         player.getInventory().addItem(randomItem);
                     }
                     player.sendMessage("§aCrate geöffnet!");
+                    player.sendTitle("³7§m--§8 §c§lCrate §7§m--", "§7§m--§8 §a§lwurde geöffnet §7§m--", 15, 45, 25);
+                }
+            } else if(event.getAction() == Action.LEFT_CLICK_AIR || event.getAction() == Action.LEFT_CLICK_BLOCK) {
+                if(crateService.getCrateByDisplayName(event.getItem().getItemMeta().getDisplayName()) != null) {
+                    event.setCancelled(true);
+
+                    ItemStack item = crateService.getCrateByDisplayName(event.getItem().getItemMeta().getDisplayName()).getCrateItem();
+                    Crate crate = crateService.getCrateByDisplayName(event.getItem().getItemMeta().getDisplayName());
+
+                    Inventory inv = Bukkit.createInventory(null, 9*3, "§cCrate Inventar");
+                    inv.setContents(crate.getItems().toArray(new ItemStack[crate.getItems().size()]));
+                    player.openInventory(inv);
+
+
                 }
             }
         }

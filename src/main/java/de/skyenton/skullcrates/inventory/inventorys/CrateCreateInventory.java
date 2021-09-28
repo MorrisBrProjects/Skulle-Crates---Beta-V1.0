@@ -41,7 +41,18 @@ public class CrateCreateInventory extends CrateInventory {
             }
         };
         page1.addActionItem(nameAction1);
-        page1.addItem(new ItemBuilder("§7Lore", Material.BOOK_AND_QUILL, (short) 0, 1).build());
+        ActionItem loreAction1 = new ActionItem(new ItemBuilder("§7Lore", Material.BOOK_AND_QUILL, (short) 0, 1).build()) {
+            @Override
+            public void onItemClick(ItemStack item) {
+
+                Crate crate = getCrateService().getCratesInMaking().get(getInvOwner().getUniqueId());
+                crate.setCurrentToSet(ToSetTypes.LORE);
+
+                getInvOwner().sendMessage("§aGeben sie im Chat die Lore ein!");
+                getInvOwner().closeInventory();
+            }
+        };
+        page1.addActionItem(loreAction1);
         ActionItem skullAction1 = new ActionItem(new ItemBuilder("§7SkullName", Material.SKULL_ITEM, (short) 0, 1).build()) {
             @Override
             public void onItemClick(ItemStack item) {
@@ -71,7 +82,7 @@ public class CrateCreateInventory extends CrateInventory {
             public void onItemClick(ItemStack item) {
                 Crate crate = getCrateService().getCratesInMaking().get(getInvOwner().getUniqueId());
 
-                    crate.getLore().add("Nur bypass zum Testen!");
+                    //crate.getLore().add("Nur bypass zum Testen!");
                 System.out.println(crate.getSkull());
                 if(getCrateService().isPlayersCrateFinish(getInvOwner())) {
                     getCrateService().createCrate(crate);
@@ -115,7 +126,7 @@ public class CrateCreateInventory extends CrateInventory {
         page2.addActionItem(item2);
 
 
-        CratePage page3 = new CratePage("§e§lCrate§7- §aItems", 9*1);
+        CratePage page3 = new CratePage("§e§lCrate§7- §aItems", 9*3);
 
         addPage(page1);
         addPage(page2);

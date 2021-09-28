@@ -53,6 +53,17 @@ public abstract class CrateInventory implements Listener {
 
     @EventHandler
     public void onClickEvent(InventoryClickEvent event) {
+
+
+        if(event.getInventory() != null && event.getClickedInventory() != null) {
+            if(event.getInventory().getTitle().equals("§cCrate Inventar")) {
+                event.setCancelled(true);
+            }
+        }
+
+
+
+
         if(event.getInventory() != null
                 && event.getClickedInventory() != null
                 && event.getCurrentItem() != null && crateService.getOpenedCrateInventory(event.getWhoClicked().getUniqueId()) != null
