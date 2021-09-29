@@ -33,6 +33,13 @@ public class CratesExecutor implements CommandExecutor {
 
 
                 switch (args[0]) {
+
+                    case "list":
+                        for (Crate crate : crateService.getCrates()) {
+                            sender.sendMessage("§cName: " + crate.getName());
+                        }
+                        break;
+
                     case "autoevent":
 
                         AutoEventSchedule autoEventSchedule = crateService.getCratePlugin().getAutoEventSchedule();
@@ -135,7 +142,7 @@ public class CratesExecutor implements CommandExecutor {
                         for (Player player : Bukkit.getOnlinePlayers()) {
                             if(player.getName().equalsIgnoreCase(args[2])) {
                                 player.getInventory().addItem(crateService.getCrateByName(args[1]).getCrateItem());
-                                player.sendMessage(SkullcratesPlugin.PREFIX + "§Du §bhast die Crate §e" + args[1] + " §bbekommen!");
+                                player.sendMessage(SkullcratesPlugin.PREFIX + "§aDu §bhast die Crate §e" + args[1] + " §bbekommen!");
                             }
                         }
                         break;
