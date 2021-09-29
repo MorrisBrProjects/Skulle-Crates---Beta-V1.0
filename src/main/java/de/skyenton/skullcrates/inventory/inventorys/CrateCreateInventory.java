@@ -20,8 +20,8 @@ public class CrateCreateInventory extends CrateInventory {
 
     public CrateCreateInventory(JavaPlugin plugin, CrateService crateService) {
         super(plugin, crateService);
-        System.out.println("construktor");
-        System.out.println("create");
+        //System.out.println("construktor");
+        //System.out.println("create");
     }
 
     @Override
@@ -82,11 +82,16 @@ public class CrateCreateInventory extends CrateInventory {
             public void onItemClick(ItemStack item) {
                 Crate crate = getCrateService().getCratesInMaking().get(getInvOwner().getUniqueId());
 
+                System.out.println(crate.getItems());
+                //getPage(2).getInventory().setContents(crate.getItems());
+
                     //crate.getLore().add("Nur bypass zum Testen!");
-                System.out.println(crate.getSkull());
+                //System.out.println(crate.getSkull());
                 if(getCrateService().isPlayersCrateFinish(getInvOwner())) {
                     getCrateService().createCrate(crate);
                     getInvOwner().getInventory().addItem(crate.getCrateItem());
+                    //getPage(2).getInventory().clear();
+
                 } else {
                     getInvOwner().sendMessage("§cDiese Crate ist nicht komplett!");
                 }
@@ -164,7 +169,7 @@ public class CrateCreateInventory extends CrateInventory {
         switch (currentItem.getItemMeta().getDisplayName()) {
 
             case "test":
-                System.out.println("test");
+                //System.out.println("test");
                 break;
 
             default:
@@ -172,7 +177,7 @@ public class CrateCreateInventory extends CrateInventory {
         }
 
 
-        System.out.println("click");
+        //System.out.println("click");
     }
 
     @Override
@@ -192,14 +197,14 @@ public class CrateCreateInventory extends CrateInventory {
 
     @Override
     protected void onActionItemClick(CratePage currentPage, ActionItem actionItem, InventoryClickEvent event) {
-        System.out.println(actionItem.getItem().getType().name());
+        //System.out.println(actionItem.getItem().getType().name());
 
     }
 
     @Override
     public void onClose(CratePage currentPage, InventoryCloseEvent event) {
-        System.out.println("close");
-        System.out.println(getCurrentPage().getTitle() + " closed");
+        //System.out.println("close");
+        //System.out.println(getCurrentPage().getTitle() + " closed");
 
 
         if(getCurrentPageAsCount() == 2) {

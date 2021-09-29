@@ -33,7 +33,7 @@ public class PlayerJoinListener implements Listener {
         executorService.schedule(new Runnable() {
             @Override
             public void run() {
-               crateService.openCustomInventory(new CrateCreateInventory((JavaPlugin) plugin, crateService), event.getPlayer());
+               //crateService.openCustomInventory(new CrateCreateInventory((JavaPlugin) plugin, crateService), event.getPlayer());
             }
         }, 1, TimeUnit.SECONDS);
     }

@@ -9,6 +9,7 @@ import de.skyenton.skullcrates.inventory.inventorys.InventoryTypes;
 import de.skyenton.skullcrates.listener.PlayerChatListener;
 import de.skyenton.skullcrates.listener.PlayerInteractListener;
 import de.skyenton.skullcrates.listener.PlayerJoinListener;
+import de.skyenton.skullcrates.runnables.AutoEventSchedule;
 import de.skyenton.skullcrates.services.CrateService;
 import org.bukkit.configuration.serialization.ConfigurationSerialization;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -19,6 +20,7 @@ public final class SkullcratesPlugin extends JavaPlugin {
 
     private final FileHandler fileHandler = new FileHandler(this);
     private CrateService crateService = new CrateService(this);
+    private AutoEventSchedule autoEventSchedule = new AutoEventSchedule(this, crateService);
 
     static {
         ConfigurationSerialization.registerClass(Crate.class, "Crate");
@@ -51,5 +53,9 @@ public final class SkullcratesPlugin extends JavaPlugin {
 
     public FileHandler getFileHandler() {
         return fileHandler;
+    }
+
+    public AutoEventSchedule getAutoEventSchedule() {
+        return autoEventSchedule;
     }
 }

@@ -4,6 +4,7 @@ import de.skyenton.skullcrates.crate.Crate;
 import de.skyenton.skullcrates.services.CrateService;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -46,6 +47,7 @@ public class PlayerInteractListener implements Listener {
                     player.sendMessage("§aCrate geöffnet!");
                     player.sendTitle("§7§m--§8 §c§lCrate §7§m--", "§7§m--§8 §a§lwurde geöffnet §7§m--", 15, 45, 25);
                     player.getItemInHand().setAmount(player.getItemInHand().getAmount()-1);
+                    player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 3.0F, 1.5F);
 
                 }
             } else if(event.getAction() == Action.LEFT_CLICK_AIR || event.getAction() == Action.LEFT_CLICK_BLOCK) {

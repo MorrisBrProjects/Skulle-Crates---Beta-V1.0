@@ -70,7 +70,7 @@ public class Crate implements ConfigurationSerializable {
         ItemStack skull = new ItemStack(Material.SKULL_ITEM, 1, (short) SkullType.PLAYER.ordinal());
         SkullMeta meta = (SkullMeta) skull.getItemMeta();
         meta.setOwner(skullName);
-        skull.setItemMeta(meta);
+        skull.setItemMeta((ItemMeta)meta);
         this.skull = skull;
     }
 

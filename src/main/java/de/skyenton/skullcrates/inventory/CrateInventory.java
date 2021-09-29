@@ -166,10 +166,10 @@ public abstract class CrateInventory implements Listener {
 
     public void addPage(CratePage page) {
         if(!pages.isEmpty()) {
-            System.out.println(pages.size());
+            //System.out.println(pages.size());
             pages.put(pages.size(), page);
         } else {
-            System.out.println(pages.size() + "df");
+            //System.out.println(pages.size() + "df");
             pages.put(0, page);
         }
     }
@@ -187,7 +187,7 @@ public abstract class CrateInventory implements Listener {
         for (UUID uuid : crateService.getUsedInventorys().keySet()) {
             if (crateService.getUsedInventorys().get(uuid).equals(this)) {
                 crateService.getUsedInventorys().remove(uuid, this);
-                System.out.println("gfjhgzhkgh");
+                //System.out.println("gfjhgzhkgh");
                 currentPage = 0; //copierte liste muss ich zugreifen zum bearbeiten / löschen
                 break;
             }

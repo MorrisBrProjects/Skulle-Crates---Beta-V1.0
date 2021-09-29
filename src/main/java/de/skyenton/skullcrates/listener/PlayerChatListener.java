@@ -1,5 +1,6 @@
 package de.skyenton.skullcrates.listener;
 
+import de.skyenton.skullcrates.SkullcratesPlugin;
 import de.skyenton.skullcrates.crate.Crate;
 import de.skyenton.skullcrates.crate.ToSetTypes;
 import de.skyenton.skullcrates.services.CrateService;
@@ -29,20 +30,20 @@ public class PlayerChatListener implements Listener {
             Crate crate = crateService.getCratesInMaking().get(player.getUniqueId());
 
             if(event.getMessage() == null) {
-                player.sendMessage("§cBitte gebe einen namen an!");
+                player.sendMessage(SkullcratesPlugin.PREFIX + "§cBitte gebe einen namen an!");
             } else {
                 switch (crate.getCurrentToSet()) {
                     case DISPLAYNAME:
                         event.setCancelled(true);
                         crate.setDisplayName(event.getMessage().replaceAll("&", "§"));
                         crate.setCurrentToSet(ToSetTypes.NONE);
-                        player.sendMessage("§aDisplayname " + crate.getDisplayName() + " §f§agesetzt!");
+                        player.sendMessage(SkullcratesPlugin.PREFIX + "§aDisplayname " + crate.getDisplayName() + " §f§agesetzt!");
                         break;
                     case SKULL:
                         event.setCancelled(true);
                         crate.setSkull(event.getMessage());
                         crate.setCurrentToSet(ToSetTypes.NONE);
-                        player.sendMessage("§aSkullname " + crate.getSkullName() + " §f§agesetzt!");
+                        player.sendMessage(SkullcratesPlugin.PREFIX + crate.getSkullName() + " §f§agesetzt!");
                         break;
                     case LORE:
                         event.setCancelled(true);
@@ -50,7 +51,7 @@ public class PlayerChatListener implements Listener {
                         lore.add(event.getMessage().replaceAll("&", "§"));
                         crate.setLore(lore);
                         crate.setCurrentToSet(ToSetTypes.NONE);
-                        player.sendMessage("§aLore §f§agesetzt!");
+                        player.sendMessage(SkullcratesPlugin.PREFIX + "§aLore §f§agesetzt!");
                         break;
                     default:
                         break;
