@@ -5,6 +5,7 @@ import de.skyenton.skullcrates.config.FileHandler;
 import de.skyenton.skullcrates.crate.Crate;
 import de.skyenton.skullcrates.inventory.CrateInventory;
 import de.skyenton.skullcrates.inventory.inventorys.CrateCreateInventory;
+import de.skyenton.skullcrates.inventory.inventorys.CrateEditInventory;
 import de.skyenton.skullcrates.inventory.inventorys.InventoryTypes;
 import de.skyenton.skullcrates.listener.PlayerChatListener;
 import de.skyenton.skullcrates.listener.PlayerInteractListener;

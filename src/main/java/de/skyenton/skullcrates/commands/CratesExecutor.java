@@ -3,6 +3,7 @@ package de.skyenton.skullcrates.commands;
 import de.skyenton.skullcrates.SkullcratesPlugin;
 import de.skyenton.skullcrates.crate.Crate;
 import de.skyenton.skullcrates.crate.ToSetTypes;
+import de.skyenton.skullcrates.inventory.inventorys.CrateEditInventory;
 import de.skyenton.skullcrates.inventory.inventorys.InventoryTypes;
 import de.skyenton.skullcrates.runnables.AutoEventSchedule;
 import de.skyenton.skullcrates.services.CrateService;
@@ -71,6 +72,26 @@ public class CratesExecutor implements CommandExecutor {
             case 2:
                 switch (args[0]) {
 
+
+                    case "edit":
+                        if(!sender.hasPermission("system.crates")) {
+                            sender.sendMessage(SkullcratesPlugin.PREFIX + "§cDu hast keine Rechte!");
+                            return true;
+                        }
+
+                        if(crateService.getCrateByName(args[1]) != null) {
+                            Crate crate = crateService.getCrateByName(args[1]);
+                            CrateEditInventory editInv = new CrateEditInventory(crateService.getCratePlugin(), crateService, crate);
+                            editInv.register();
+                            crateService.openCustomInventory(editInv, (Player)sender);
+                        } else {
+                            sender.sendMessage(SkullcratesPlugin.PREFIX + "§cDiese Crate exestiert nicht!");
+                            return true;
+                        }
+
+                        break;
+
+
                     case "create":
 
                         if(!sender.hasPermission("system.crates")) {
@@ -92,9 +113,10 @@ public class CratesExecutor implements CommandExecutor {
                                     sender.sendMessage(SkullcratesPlugin.PREFIX + "§cDiese Crate exestiert bereits!");
                                 }
                             } else {
-                                Crate crate = crateService.getCratesInMaking().get(((Player) sender).getUniqueId());
+                                //get inv from this inv
+                                Crate crate = crateService.getCrateByName(args[1]);
                                 crateService.openRegistedInventory(InventoryTypes.MAIN.name(), (Player) sender);
-                                sender.sendMessage(SkullcratesPlugin.PREFIX + "§aCrate edit menü geöffnet!");
+                                sender.sendMessage(SkullcratesPlugin.PREFIX + "§aCrate create menü geöffnet!");
                             }
 
                         }
