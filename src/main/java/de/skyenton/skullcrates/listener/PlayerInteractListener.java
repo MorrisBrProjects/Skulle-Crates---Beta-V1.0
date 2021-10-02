@@ -61,9 +61,16 @@ public class PlayerInteractListener implements Listener {
                     ItemStack item = crateService.getCrateByDisplayName(event.getItem().getItemMeta().getDisplayName()).getCrateItem();
                     Crate crate = crateService.getCrateByDisplayName(event.getItem().getItemMeta().getDisplayName());
 
-                    Inventory inv = Bukkit.createInventory(null, 9*3, "§cCrate Inventar");
-                    inv.setContents(crate.getItems().toArray(new ItemStack[crate.getItems().size()]));
-                    player.openInventory(inv);
+                    if(crate.getItems().size() >= 9*3) {
+                        Inventory inv = Bukkit.createInventory(null, 9*6, "§cCrate Inventar");
+                        inv.setContents(crate.getItems().toArray(new ItemStack[crate.getItems().size()]));
+                        player.openInventory(inv);
+                    } else {
+                        Inventory inv = Bukkit.createInventory(null, 9*3, "§cCrate Inventar");
+                        inv.setContents(crate.getItems().toArray(new ItemStack[crate.getItems().size()]));
+                        player.openInventory(inv);
+                    }
+
 
 
                 }

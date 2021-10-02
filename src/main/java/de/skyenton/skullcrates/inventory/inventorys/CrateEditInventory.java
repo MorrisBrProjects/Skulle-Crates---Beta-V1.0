@@ -83,6 +83,7 @@ public class CrateEditInventory extends CrateInventory {
                 // getInvOwner().sendMessage(getCrateService().getCrateLoader().loadCratebyName("test").getName());
                 //getInvOwner().closeInventory();
                 openPage(getPage(2));
+
                 for (int i = 0; i < crate.getItems().size(); i++) {
                     getCurrentPage().getInventory().setItem(i, crate.getItems().get(i));
                 }

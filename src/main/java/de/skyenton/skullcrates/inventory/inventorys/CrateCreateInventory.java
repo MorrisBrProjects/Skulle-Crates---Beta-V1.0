@@ -133,7 +133,7 @@ public class CrateCreateInventory extends CrateInventory {
         page2.addActionItem(item2);
 
 
-        CratePage page3 = new CratePage("§e§lCrate§7- §aItems", 9*3);
+        CratePage page3 = new CratePage("§e§lCrate§7- §aItems", 9*6);
 
         addPage(page1);
         addPage(page2);
