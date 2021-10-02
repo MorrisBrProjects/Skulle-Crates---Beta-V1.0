@@ -3,6 +3,7 @@ package de.skyenton.skullcrates.listener;
 import de.skyenton.skullcrates.SkullcratesPlugin;
 import de.skyenton.skullcrates.crate.Crate;
 import de.skyenton.skullcrates.crate.ToSetTypes;
+import de.skyenton.skullcrates.inventory.inventorys.CrateEditInventory;
 import de.skyenton.skullcrates.services.CrateService;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -58,6 +59,36 @@ public class PlayerChatListener implements Listener {
                 }
             }
         }
+
+        if(((CrateEditInventory)crateService.getOpenedCrateInventory(player.getUniqueId())) != null) {
+            Crate crateEdit = ((CrateEditInventory)crateService.getOpenedCrateInventory(player.getUniqueId())).getCrate();
+
+            switch (crateEdit.getCurrentToSet()) {
+                case DISPLAYNAME:
+                    event.setCancelled(true);
+                    crateEdit.setDisplayName(event.getMessage().replaceAll("&", "§"));
+                    crateEdit.setCurrentToSet(ToSetTypes.NONE);
+                    player.sendMessage(SkullcratesPlugin.PREFIX + "§aDisplayname " + crateEdit.getDisplayName() + " §f§agesetzt!");
+                    break;
+                case SKULL:
+                    event.setCancelled(true);
+                    crateEdit.setSkull(event.getMessage());
+                    crateEdit.setCurrentToSet(ToSetTypes.NONE);
+                    player.sendMessage(SkullcratesPlugin.PREFIX + crateEdit.getSkullName() + " §f§agesetzt!");
+                    break;
+                case LORE:
+                    event.setCancelled(true);
+                    List<String> lore = new ArrayList<>();
+                    lore.add(event.getMessage().replaceAll("&", "§"));
+                    crateEdit.setLore(lore);
+                    crateEdit.setCurrentToSet(ToSetTypes.NONE);
+                    player.sendMessage(SkullcratesPlugin.PREFIX + "§aLore §f§agesetzt!");
+                    break;
+                default:
+                    break;
+            }
+        }
+
     }
 
 }

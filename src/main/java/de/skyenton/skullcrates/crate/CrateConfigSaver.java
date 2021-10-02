@@ -20,7 +20,10 @@ public class CrateConfigSaver {
     }
 
     public void delete(Crate crate) {
-        fileHandler.getConfig("CrateData.yml").set("Crates." + crate.getName(), null);
+        fileHandler.getConfig("CrateData.yml").get().set("Crates." + crate.getName(), null);
         fileHandler.getConfig("CrateData.yml").save();
+
+        fileHandler.getConfig("DeletedCrates.yml").get().set("Crates." + crate.getName(), crate);
+        fileHandler.getConfig("DeletedCrates.yml").save();
     }
 }

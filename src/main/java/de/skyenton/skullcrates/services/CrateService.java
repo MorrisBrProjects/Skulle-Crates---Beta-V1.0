@@ -139,6 +139,9 @@ public class CrateService {
     }
 
     public void createCrate(Crate crate) {
+        if(getCrateByName(crate.getName()) != null) {
+            getCrates().remove(getCrateByName(crate.getName()));
+        }
         getCrates().add(crate);
         getCrateSaver().saveCreate(crate);
     }

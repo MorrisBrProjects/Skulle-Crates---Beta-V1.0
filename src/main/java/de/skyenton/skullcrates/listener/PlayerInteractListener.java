@@ -41,13 +41,15 @@ public class PlayerInteractListener implements Listener {
 
                     ItemStack randomItem = crate.getItems().get(new Random().nextInt(crate.getItems().size()));
 
-                    if(randomItem != null) {
-                        player.getInventory().addItem(randomItem);
-                    }
-                    player.sendMessage("§aCrate geöffnet!");
                     player.sendTitle("§7§m--§8 §c§lCrate §7§m--", "§7§m--§8 §a§lwurde geöffnet §7§m--", 15, 45, 25);
                     player.getItemInHand().setAmount(player.getItemInHand().getAmount()-1);
                     player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 3.0F, 1.5F);
+
+                    if(randomItem != null) {
+                        player.getInventory().addItem(randomItem);
+                    }
+                    //player.sendMessage("§aCrate geöffnet!");
+
 
                 }
             } else if(event.getAction() == Action.LEFT_CLICK_AIR || event.getAction() == Action.LEFT_CLICK_BLOCK) {

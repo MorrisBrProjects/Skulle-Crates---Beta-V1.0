@@ -1,5 +1,6 @@
 package de.skyenton.skullcrates.inventory.inventorys;
 
+import de.skyenton.skullcrates.SkullcratesPlugin;
 import de.skyenton.skullcrates.crate.Crate;
 import de.skyenton.skullcrates.crate.ToSetTypes;
 import de.skyenton.skullcrates.inventory.ActionItem;
@@ -36,7 +37,7 @@ public class CrateCreateInventory extends CrateInventory {
                 Crate crate = getCrateService().getCratesInMaking().get(getInvOwner().getUniqueId());
                 crate.setCurrentToSet(ToSetTypes.DISPLAYNAME);
 
-                getInvOwner().sendMessage("§aGeben sie im Chat den Namen ein!");
+                getInvOwner().sendMessage(SkullcratesPlugin.PREFIX + "§aGeben sie im Chat den Namen ein!");
                 getInvOwner().closeInventory();
             }
         };
@@ -47,8 +48,7 @@ public class CrateCreateInventory extends CrateInventory {
 
                 Crate crate = getCrateService().getCratesInMaking().get(getInvOwner().getUniqueId());
                 crate.setCurrentToSet(ToSetTypes.LORE);
-
-                getInvOwner().sendMessage("§aGeben sie im Chat die Lore ein!");
+                getInvOwner().sendMessage(SkullcratesPlugin.PREFIX + "§aGeben sie im Chat die Lore ein!");
                 getInvOwner().closeInventory();
             }
         };
@@ -59,7 +59,7 @@ public class CrateCreateInventory extends CrateInventory {
                 Crate crate = getCrateService().getCratesInMaking().get(getInvOwner().getUniqueId());
                 crate.setCurrentToSet(ToSetTypes.SKULL);
                 getInvOwner().closeInventory();
-                getInvOwner().sendMessage("§aGeben sie im Chat den Skull Namen ein!");
+                getInvOwner().sendMessage(SkullcratesPlugin.PREFIX + "§aGeben sie im Chat den Skull Namen ein!");
             }
         };
         page1.addActionItem(skullAction1);
@@ -91,9 +91,11 @@ public class CrateCreateInventory extends CrateInventory {
                     getCrateService().createCrate(crate);
                     getInvOwner().getInventory().addItem(crate.getCrateItem());
                     //getPage(2).getInventory().clear();
+                    getInvOwner().sendMessage(SkullcratesPlugin.PREFIX + "§aCrate wurde erstellt!");
+                    getInvOwner().closeInventory();
 
                 } else {
-                    getInvOwner().sendMessage("§cDiese Crate ist nicht komplett!");
+                    getInvOwner().sendMessage(SkullcratesPlugin.PREFIX + "§cDiese Crate ist nicht komplett!");
                 }
             }
         };
@@ -107,9 +109,9 @@ public class CrateCreateInventory extends CrateInventory {
                     getCrateService().removeMakingCrate(getInvOwner());
                     getPage(2).getInventory().clear();
                     getInvOwner().closeInventory();
-                    getInvOwner().sendMessage("§aDu hast die Crate verworfen!");
+                    getInvOwner().sendMessage(SkullcratesPlugin.PREFIX + "§aDu hast die Crate verworfen!");
                 } else {
-                    getInvOwner().sendMessage("§cDu Bist aktuell keine Crate im Editieren!");
+                    getInvOwner().sendMessage(SkullcratesPlugin.PREFIX + "§cDu Bist aktuell keine Crate im Editieren!");
                     getInvOwner().closeInventory();
                 }
             }
@@ -160,7 +162,7 @@ public class CrateCreateInventory extends CrateInventory {
     @Override
     public void onClick(CratePage clickedPage, ItemStack currentItem, InventoryClickEvent event) {
 
-        if(getCurrentPageAsCount() != 2) {
+        if(getCurrentPage().getInventory().equals(event.getClickedInventory()) && getCurrentPageAsCount() != 2) {
             event.setCancelled(true);
         }
 

@@ -1,6 +1,7 @@
 package de.skyenton.skullcrates.inventory.inventorys;
 
 import com.google.common.collect.FluentIterable;
+import de.skyenton.skullcrates.SkullcratesPlugin;
 import de.skyenton.skullcrates.crate.Crate;
 import de.skyenton.skullcrates.crate.ToSetTypes;
 import de.skyenton.skullcrates.inventory.ActionItem;
@@ -44,15 +45,10 @@ public class CrateEditInventory extends CrateInventory {
             public void onItemClick(ItemStack item) {
 
                 //getInvOwner().sendMessage("Crdddate: " + crate.getName());
-                //crate.setCurrentToSet(ToSetTypes.DISPLAYNAME);
+                crate.setCurrentToSet(ToSetTypes.DISPLAYNAME);
 
-                getInvOwner().sendMessage("§aGeben sie im Chat den Namen ein!");
-                getInvOwner().sendMessage("");
-                getInvOwner().sendMessage("");
-                getInvOwner().sendMessage("§cDiese funktion ist zurzeit blockiert!");
-                getInvOwner().sendMessage("");
-                getInvOwner().sendMessage("");
                 getInvOwner().closeInventory();
+                getInvOwner().sendMessage(SkullcratesPlugin.PREFIX + "§aGeben sie im Chat den Namen ein!");
             }
         };
         page1.addActionItem(nameAction1);
@@ -60,29 +56,19 @@ public class CrateEditInventory extends CrateInventory {
             @Override
             public void onItemClick(ItemStack item) {
 
-                //crate.setCurrentToSet(ToSetTypes.LORE);
+                crate.setCurrentToSet(ToSetTypes.LORE);
 
-                getInvOwner().sendMessage("§aGeben sie im Chat die Lore ein!");
-                getInvOwner().sendMessage("");
-                getInvOwner().sendMessage("");
-                getInvOwner().sendMessage("§cDiese funktion ist zurzeit blockiert!");
-                getInvOwner().sendMessage("");
-                getInvOwner().sendMessage("");
                 getInvOwner().closeInventory();
+                getInvOwner().sendMessage(SkullcratesPlugin.PREFIX + "§aGeben sie im Chat die Lore ein!");
             }
         };
         page1.addActionItem(loreAction1);
         ActionItem skullAction1 = new ActionItem(new ItemBuilder("§7SkullName", Material.SKULL_ITEM, (short) 0, 1).build()) {
             @Override
             public void onItemClick(ItemStack item) {
-                //crate.setCurrentToSet(ToSetTypes.SKULL);
-                getInvOwner().sendMessage("§aGeben sie im Chat den Skull Namen ein!");
-                getInvOwner().sendMessage("");
-                getInvOwner().sendMessage("");
-                getInvOwner().sendMessage("§cDiese funktion ist zurzeit blockiert!");
-                getInvOwner().sendMessage("");
-                getInvOwner().sendMessage("");
+                crate.setCurrentToSet(ToSetTypes.SKULL);
                 getInvOwner().closeInventory();
+                getInvOwner().sendMessage(SkullcratesPlugin.PREFIX + "§aGeben sie im Chat den Skull Namen ein!");
             }
         };
         page1.addActionItem(skullAction1);
@@ -97,14 +83,17 @@ public class CrateEditInventory extends CrateInventory {
                 // getInvOwner().sendMessage(getCrateService().getCrateLoader().loadCratebyName("test").getName());
                 //getInvOwner().closeInventory();
                 openPage(getPage(2));
+                for (int i = 0; i < crate.getItems().size(); i++) {
+                    getCurrentPage().getInventory().setItem(i, crate.getItems().get(i));
+                }
             }
         };
         page1.addActionItem(itemsAction1);
-        ActionItem createAction1 = new ActionItem(new ItemBuilder("§aErstellen", Material.CONCRETE, (short) 5, 1).build()) {
+        ActionItem createAction1 = new ActionItem(new ItemBuilder("§aSpeichern", Material.CONCRETE, (short) 5, 1).build()) {
             @Override
             public void onItemClick(ItemStack item) {
 
-                System.out.println(crate.getItems());
+                //System.out.println(crate.getItems());
                 //getPage(2).getInventory().setContents(crate.getItems());
 
                     //crate.getLore().add("Nur bypass zum Testen!");
@@ -112,6 +101,8 @@ public class CrateEditInventory extends CrateInventory {
                 getCrateService().createCrate(crate);
                 getInvOwner().getInventory().addItem(crate.getCrateItem());
                 //getPage(2).getInventory().clear();
+                getInvOwner().sendMessage(SkullcratesPlugin.PREFIX + "§aCrate wurde gespeichert!");
+                getInvOwner().closeInventory();
             }
         };
         page1.addActionItem(createAction1);
@@ -150,7 +141,7 @@ public class CrateEditInventory extends CrateInventory {
 
     @Override
     public void onOpen(Player uuid) {
-        uuid.sendMessage("Crate: " + crate.getName());
+        //uuid.sendMessage("Crate: " + crate.getName());
         //getCrateService().addMakingCrate(new Crate(), uuid);
     }
 
@@ -171,8 +162,8 @@ public class CrateEditInventory extends CrateInventory {
     @Override
     public void onClick(CratePage clickedPage, ItemStack currentItem, InventoryClickEvent event) {
 
-        if(getCurrentPageAsCount() != 2) {
-           // event.setCancelled(true);
+        if(getCurrentPage().getInventory().equals(event.getClickedInventory()) && getCurrentPageAsCount() != 2) {
+            event.setCancelled(true);
         }
 
 
@@ -220,9 +211,13 @@ public class CrateEditInventory extends CrateInventory {
 
         if(getCurrentPageAsCount() == 2) {
             crate.setItems(Arrays.asList(getPage(2).getInventory().getContents()));
-            getInvOwner().sendMessage("§aInventar wurde gespeichert!");
+            getInvOwner().sendMessage(SkullcratesPlugin.PREFIX + "§aInventar wurde gespeichert!");
             setPage(0);
         }
 
+    }
+
+    public Crate getCrate() {
+        return crate;
     }
 }

@@ -35,6 +35,7 @@ public abstract class CrateInventory implements Listener {
 
     public void onOpen(Player uuid) {
         currentPage = 0;
+        //plugin.getServer().getPluginManager().registerEvents(this, plugin);
     }
 
     public void onClose(CratePage currentPage, InventoryCloseEvent event) {
@@ -62,7 +63,7 @@ public abstract class CrateInventory implements Listener {
         }
 
 
-
+        if(event.getClickedInventory() == null || !getCurrentPage().getInventory().equals(event.getClickedInventory())) return;
 
         if(event.getInventory() != null
                 && event.getClickedInventory() != null
@@ -101,6 +102,9 @@ public abstract class CrateInventory implements Listener {
 
     @EventHandler
     public void onCloseEvent(InventoryCloseEvent event) {
+
+        if(event.getInventory() == null || !getCurrentPage().getInventory().equals(event.getInventory())) return;
+
         if(crateService.getOpenedCrateInventory(event.getPlayer().getUniqueId()) != null && crateService.getOpenedCrateInventory(event.getPlayer().getUniqueId()).getCurrentPage().getTitle().equals(event.getInventory().getTitle())) {
             crateService.getOpenedCrateInventory(event.getPlayer().getUniqueId()).onClose(getCurrentPage(), event);
         }

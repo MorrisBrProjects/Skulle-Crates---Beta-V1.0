@@ -1,6 +1,7 @@
 package de.skyenton.skullcrates.commands;
 
 import de.skyenton.skullcrates.SkullcratesPlugin;
+import de.skyenton.skullcrates.config.FileHandler;
 import de.skyenton.skullcrates.crate.Crate;
 import de.skyenton.skullcrates.crate.ToSetTypes;
 import de.skyenton.skullcrates.inventory.inventorys.CrateEditInventory;
@@ -12,6 +13,9 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
+
+import java.util.List;
 
 public class CratesExecutor implements CommandExecutor {
 
@@ -55,13 +59,13 @@ public class CratesExecutor implements CommandExecutor {
                             for (Player player : Bukkit.getOnlinePlayers()) {
                                 player.sendTitle("§8| §6§lAuto Crate Event §8|", "§4stopt!", 15, 45, 25);
                             }
-                            sender.sendMessage("§aAutoevent gestoppt!");
+                            sender.sendMessage(SkullcratesPlugin.PREFIX + "§aAutoevent gestoppt!");
                         } else {
                             autoEventSchedule.start();
                             for (Player player : Bukkit.getOnlinePlayers()) {
                                 player.sendTitle("§8| §6§lAuto Crate Event §8|", "§astartet!", 15, 45, 25);
                             }
-                            sender.sendMessage("§aAutoevent gestartet!");
+                            sender.sendMessage(SkullcratesPlugin.PREFIX + "§aAutoevent gestartet!");
                         }
 
                     default:
@@ -71,6 +75,34 @@ public class CratesExecutor implements CommandExecutor {
 
             case 2:
                 switch (args[0]) {
+
+                    case "import":
+                        String fileName = args[1];
+
+                        FileHandler handler = crateService.getCratePlugin().getFileHandler();
+                        FileHandler.Config config = handler.getConfig(fileName + ".yml");
+
+                        if(config == null || config.get() == null ||config.get().getConfigurationSection("Crates") == null || config.get().getConfigurationSection("Crates").getKeys(false).isEmpty()) {
+                            sender.sendMessage(SkullcratesPlugin.PREFIX + "§cDiese Datei wurde nicht gefunden!");
+                            return true;
+                        }
+
+                        for (String crateName : config.get().getConfigurationSection("Crates").getKeys(false)) {
+                            Crate crate = new Crate();
+
+                            crate.setName(crateName);
+                            crate.getLore().add(config.get().getString("Crates." + crateName + ".lore"));
+                            crate.setSkull(config.get().getString("Crates." + crateName + ".skull"));
+                            crate.setItems((List<ItemStack>) config.get().getList("Crates." + crateName + ".inventory.items"));
+                            crate.setDisplayName(crateName);
+                            crate.setCurrentToSet(ToSetTypes.NONE);
+
+                            crateService.getCrates().add(crate);
+                        }
+
+                        sender.sendMessage(SkullcratesPlugin.PREFIX + "§aCrates wurden importiert!");
+
+                        break;
 
 
                     case "edit":
@@ -129,6 +161,11 @@ public class CratesExecutor implements CommandExecutor {
                             return true;
                         }
 
+                        if(crateService.getCrateByName(args[1]) == null) {
+                            sender.sendMessage(SkullcratesPlugin.PREFIX + "§cDiese Crate existiert nicht!");
+                            return true;
+                        }
+
                         crateService.getCrateSaver().delete(crateService.getCrateByName(args[1]));
                         crateService.getCrates().remove(crateService.getCrateByName(args[1]));
                         sender.sendMessage(SkullcratesPlugin.PREFIX + "§cCrate wurde gelöscht!");
@@ -137,6 +174,11 @@ public class CratesExecutor implements CommandExecutor {
 
                         if(!sender.hasPermission("system.crates")) {
                             sender.sendMessage(SkullcratesPlugin.PREFIX + "§cDu hast keine Rechte!");
+                            return true;
+                        }
+
+                        if(crateService.getCrateByName(args[1]) == null) {
+                            sender.sendMessage(SkullcratesPlugin.PREFIX + "§cDiese Crate existiert nicht!");
                             return true;
                         }
 
@@ -161,10 +203,15 @@ public class CratesExecutor implements CommandExecutor {
                             return true;
                         }
 
+                        if(crateService.getCrateByName(args[1]) == null) {
+                            sender.sendMessage(SkullcratesPlugin.PREFIX + "§cDiese Crate existiert nicht!");
+                            return true;
+                        }
+
                         for (Player player : Bukkit.getOnlinePlayers()) {
                             if(player.getName().equalsIgnoreCase(args[2])) {
                                 player.getInventory().addItem(crateService.getCrateByName(args[1]).getCrateItem());
-                                player.sendMessage(SkullcratesPlugin.PREFIX + "§aDu §bhast die Crate §e" + args[1] + " §bbekommen!");
+                                player.sendMessage(SkullcratesPlugin.PREFIX + "§cDu §bhast die Crate §e" + args[1] + " §bbekommen!");
                             }
                         }
                         break;
